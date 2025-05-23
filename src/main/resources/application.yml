@@ -1,6 +1,6 @@
 spring:
   application:
-    name:microservices-order-service-demo
+    name: microservices-order-service-demo
 
 server:
   port: 8083
