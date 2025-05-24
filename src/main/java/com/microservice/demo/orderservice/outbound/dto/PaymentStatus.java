@@ -11,4 +11,5 @@ public class PaymentStatus {
     private String status;
     private Double amount;
     private String paymentMethod;
+    private String instance;
 }
