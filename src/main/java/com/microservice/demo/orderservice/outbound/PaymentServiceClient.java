@@ -2,7 +2,7 @@ package com.microservice.demo.orderservice.outbound;
 
 import com.microservice.demo.orderservice.outbound.dto.PaymentStatus;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Component;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 

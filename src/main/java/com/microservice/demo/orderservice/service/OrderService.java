@@ -6,11 +6,14 @@ import com.microservice.demo.orderservice.outbound.PaymentServiceClient;
 import com.microservice.demo.orderservice.outbound.dto.PaymentStatus;
 import com.microservice.demo.orderservice.service.dto.OrderStatus;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final PaymentServiceClient paymentServiceClient;
@@ -27,20 +30,22 @@ public class OrderService {
         try {
             PaymentStatus paymentStatus = paymentServiceClient.getPaymentStatus(orderId);
             orderStatus.setPaymentStatus(paymentStatus);
+            return orderStatus;
         } catch (Exception e) {
-            // Handle service unavailable scenario
-        }
-        buildFallbackPayment(orderId, orderStatus);
+            log.error(e.getMessage());
 
-        return orderStatus;
+        }
+        return buildFallbackPayment(orderId, orderStatus);
+
     }
 
-    private static void buildFallbackPayment(String orderId, OrderStatus orderStatus) {
+    private OrderStatus buildFallbackPayment(String orderId, OrderStatus orderStatus) {
         PaymentStatus fallbackPayment = new PaymentStatus();
         fallbackPayment.setOrderId(orderId);
         fallbackPayment.setStatus("SERVICE_UNAVAILABLE");
         fallbackPayment.setAmount(0.0);
         fallbackPayment.setPaymentMethod("N/A");
         orderStatus.setPaymentStatus(fallbackPayment);
+        return orderStatus;
     }
 }

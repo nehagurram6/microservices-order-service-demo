@@ -1,6 +1,12 @@
 spring:
   application:
     name: microservices-order-service-demo
+  cloud:
+    discovery:
+      enabled: true
+    loadbalancer:
+      cache:
+        enabled: false
 
 server:
   port: 8083
@@ -9,5 +15,22 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true          # Explicitly enable
+    register-with-eureka: true    # Explicitly enable
+    registry-fetch-interval-seconds: 5  # Fetch every 5 seconds
   instance:
     prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
+    hostname: ${spring.application.name}
+
+logging:
+  level:
+    com.netflix.eureka: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+    com.netflix.discovery: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+    feign: DEBUG
+    org.springframework.cloud.loadbalancer: DEBUG
+    com.netflix.loadbalancer: DEBUG
+    com.microservice.demo.orderservice.outbound.PaymentServiceClient: DEBUG
+
